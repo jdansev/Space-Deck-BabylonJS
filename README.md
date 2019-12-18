@@ -2,7 +2,8 @@
 An observation deck in the far depths of space. Built with [BabylonJS](https://www.babylonjs.com/)
 
 
-### Installation
+### Setup
+To run this project, install it locally using npm:  
 ```
 npm install
 npx http-server
