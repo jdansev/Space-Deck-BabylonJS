@@ -1,6 +1,5 @@
 # Interstellar-Observation-Deck
-An observation deck in the far depths of space. Built with [BabylonJS](https://www.babylonjs.com/)
-
+Witness some of the universe's most beautiful and mysterious celestial bodies from the comfort of an observation deck in deep space. Made with BabylonJS. Built with [BabylonJS](https://www.babylonjs.com/)
 
 ### Setup
 To run this project, install it locally using npm:  
