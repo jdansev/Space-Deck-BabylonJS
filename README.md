@@ -2,7 +2,7 @@
 An observation deck in the far depths of space. Built with [BabylonJS](https://www.babylonjs.com/)
 
 
-### Usage
+### Installation
 ```
 npm install
 npx http-server
