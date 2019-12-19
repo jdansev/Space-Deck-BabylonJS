@@ -214,7 +214,19 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'mercury.glb', scene, function (
 
 
 
-
+// space station
+var spaceStationRoot = new BABYLON.TransformNode('space_station_root');
+BABYLON.SceneLoader.ImportMesh(null, 'models/', 'space_station.glb', scene, function (meshes) {
+	meshes.forEach(mesh => {
+		// leave meshes already parented to maintain model hierarchy:
+		if (!mesh.parent) {
+			mesh.parent = spaceStationRoot;
+		}
+	});
+	spaceStationRoot.position = new BABYLON.Vector3(-185, 32, 500);
+	spaceStationRoot.scaling = new BABYLON.Vector3(0.06, 0.06, 0.06);
+	spaceStationRoot.rotation.y = Math.PI/2 * -0.1;
+});
 
 
 
