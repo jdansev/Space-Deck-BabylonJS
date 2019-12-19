@@ -173,7 +173,7 @@ planetLightSphere.material = planetEmissive;
 var planetLight = new BABYLON.DirectionalLight("planet_light", new BABYLON.Vector3(0, 1, 0), scene);
 planetLight.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
 planetLight.specular = new BABYLON.Color3(1, 1, 1);
-planetLight.intensity = 3.5;
+planetLight.intensity = 8.5;
 
 
 var planetRoot = new BABYLON.TransformNode('planet_root');
@@ -187,6 +187,7 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'mercury.glb', scene, function (
 
 
 	planetRoot.position = new BABYLON.Vector3(250, -180, 1000); // good
+	planetRoot.rotation.y = Math.PI/2;
 	planetRoot.scaling = new BABYLON.Vector3(45, 45, 45);
 
 	setOrbitTarget(planetRoot.position);
@@ -197,9 +198,9 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'mercury.glb', scene, function (
 	var planetRootPosition = Object.assign({}, planetRoot.position); // assign value not reference in javascript
 
 	planetLightSphere.position = planetRootPosition;
-	planetLightSphere.position.y = planetRootPosition.y + 200;
+	planetLightSphere.position.y = planetRootPosition.y + 50;
 	planetLightSphere.position.x = planetRootPosition.x + 400;
-	planetLightSphere.position.z = planetRootPosition.z + 200;
+	planetLightSphere.position.z = planetRootPosition.z + 165;
 
 	planetLight.position = planetLightSphere.position;
 
@@ -293,7 +294,9 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'light_post.gltf', scene, functi
 	shadowGenerator.useContactHardeningShadow = true;
 	shadowGenerator.contactHardeningLightSizeUVRatio = 0.05;
 	shadowGenerator.setDarkness(0.2);
-		
+
+	planetLight.excludedMeshes.push(lightTip);
+	planetLight.excludedMeshes.push(lightStand);
 });
 
 
