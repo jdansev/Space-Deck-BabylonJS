@@ -30,6 +30,9 @@ function createArcCam() {
 	var cam =  new BABYLON.ArcRotateCamera('OrbitCamera', 0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
 	cam.position = new BABYLON.Vector3(0, 5, -50);
 	cam.setTarget(new BABYLON.Vector3(0, 0, 0));
+	cam.wheelPrecision = 0.1;
+	cam.lowerRadiusLimit = 500.0;
+	cam.upperRadiusLimit = 1150.0;
 	return cam;
 }
 
@@ -170,6 +173,8 @@ var planetEmissive = new BABYLON.StandardMaterial('planetEmissive1', scene);
 planetEmissive.emissiveColor = new BABYLON.Color3(1.0, 1.0, 1.0);
 planetLightSphere.material = planetEmissive;
 
+planetLightSphere.setEnabled(false);
+
 var planetLight = new BABYLON.DirectionalLight("planet_light", new BABYLON.Vector3(0, 1, 0), scene);
 planetLight.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
 planetLight.specular = new BABYLON.Color3(1, 1, 1);
@@ -193,8 +198,6 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'mercury.glb', scene, function (
 	setOrbitTarget(planetRoot.position);
 
 
-
-
 	var planetRootPosition = Object.assign({}, planetRoot.position); // assign value not reference in javascript
 
 	planetLightSphere.position = planetRootPosition;
@@ -203,6 +206,8 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'mercury.glb', scene, function (
 	planetLightSphere.position.z = planetRootPosition.z + 165;
 
 	planetLight.position = planetLightSphere.position;
+
+	planetLightSphere.setEnabled(true);
 
 	var direction = planetLight.setDirectionToTarget(planetRoot.position);
 
@@ -244,6 +249,7 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'galaxy.glb', scene, function (m
 	galaxyRoot.scaling = galaxyRoot.scaling.multiply(new BABYLON.Vector3(22, 10, 22));
 	galaxyRoot.position = new BABYLON.Vector3(80, -10, 3800);
 	galaxyRoot.rotation.x = Math.PI/2 * -0.1;
+
 });
 
 
@@ -379,28 +385,10 @@ scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionM
 
 // Game/Render loop - Do on every frame
 scene.onBeforeRenderObservable.add(() => {
-
-	// automatically deselect the box if player moves out of selection range
-	// if (selected && selected.name == 'light_stand') {
-	// 	var dist = BABYLON.Vector3.Distance(camera.position, lampPostRoot.position);
-
-	// 	if (dist > MIN_SELECT_DISTANCE) {
-	// 		selectHl.removeMesh(selected);
-	// 		selected = null;
-	// 	}
-	// }
-
-
 	// rotate galaxy
-	galaxyRoot.rotation.y += 0.00018;
-
+	galaxyRoot.addRotation(0.0, 0.0001, 0.0);
 	// rotate planet
 	planetRoot.rotation.y += 0.0003;
-
-	// orbit camera direction vector
-	// var orbitDirection = BABYLON.Vector3.Normalize(orbitCamera.target.subtract(orbitCamera.position));
-	// console.log(orbitDirection);
-
 });
 
 
