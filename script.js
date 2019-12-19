@@ -6,7 +6,10 @@ const QUALITY_HIGH = 2048;
 const QUALITY = QUALITY_HIGH;
 
 
-var engine, scene, camera;
+var engine, scene;
+
+var fpsCamera, orbitCamera;
+var lastCamPos = new BABYLON.Vector3.Zero();
 
 var canvas = document.getElementById('renderCanvas');
 engine = new BABYLON.Engine(canvas);
@@ -19,25 +22,80 @@ scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
 
 
 
-// create the camera and set it's initial location
-camera = new BABYLON.UniversalCamera('camera', new BABYLON.Vector3(0, 5, -5), scene);
 
-// intertia when moving and rotating the camera
-camera.inertia = 0.7;
 
-// affects the speed only when moving
-camera.speed = 0.5;
+/* Cameras */
 
-// sensitivity of camera rotation when the mouse is moved
-camera.angularSensibility = 5000;
+function createArcCam() {
+	var cam =  new BABYLON.ArcRotateCamera('OrbitCamera', 0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
+	cam.position = new BABYLON.Vector3(0, 5, -50);
+	cam.setTarget(new BABYLON.Vector3(0, 0, 0));
+	return cam;
+}
 
-// then apply collisions and gravity to the active camera
-camera.checkCollisions = true;
-camera.applyGravity = true;
-camera._needMoveForGravity = true;
+function setOrbitTarget(pos) {
+	orbitCamera.setTarget(pos);
+}
 
-// set the ellipsoid around the camera (e.g. your player's size)
-camera.ellipsoid = new BABYLON.Vector3(1, 1.75, 1);
+
+let enablePointerLock = function() {
+	canvas.requestPointerLock = canvas.requestPointerLock || canvas.msRequestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
+	if (canvas.requestPointerLock) {
+		canvas.requestPointerLock();
+	}
+};
+
+let disablePointerLock = function() {
+	document.exitPointerLock = document.exitPointerLock || document.msRequestPointerLock || document.mozExitPointerLock || document.webkitRequestPointerLock;
+	if (document.exitPointerLock) {
+		document.exitPointerLock();
+	}
+}
+
+let attachPointerLockClickEvent = function() {
+	canvas.addEventListener('click', enablePointerLock, false);
+}
+
+let detachPointerLockClickEvent = function() {
+	canvas.removeEventListener('click', enablePointerLock, false);
+}
+
+
+function createFPSCam() {
+	// create the camera and set it's initial location
+	var cam = new BABYLON.UniversalCamera('FPSCamera', new BABYLON.Vector3(0, 5, -5), scene);
+
+	// intertia when moving and rotating the camera
+	cam.inertia = 0.7;
+
+	// affects the speed only when moving
+	cam.speed = 0.5;
+
+	// sensitivity of camera rotation when the mouse is moved
+	cam.angularSensibility = 5000;
+
+	// then apply collisions and gravity to the active camera
+	cam.checkCollisions = true;
+	cam.applyGravity = true;
+	cam._needMoveForGravity = true;
+
+	// set the ellipsoid around the camera (e.g. your player's size)
+	cam.ellipsoid = new BABYLON.Vector3(1, 1.75, 1);
+
+	// configure the camera to respond to the WASD keys
+	cam.keysUp.push(87);    // W
+	cam.keysDown.push(83)   // D
+	cam.keysLeft.push(65);  // A
+	cam.keysRight.push(68); // S
+
+	return cam;
+}
+
+
+orbitCamera = createArcCam();
+fpsCamera = createFPSCam();
+
+
 
 
 
@@ -52,11 +110,7 @@ scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionM
 }));
 
 
-// configure the camera to respond to the WASD keys
-camera.keysUp.push(87);    // W
-camera.keysDown.push(83)   // D
-camera.keysLeft.push(65);  // A
-camera.keysRight.push(68); // S
+
 
 
 
@@ -69,13 +123,13 @@ scene.collisionsEnabled = true;
 ground.checkCollisions = true;
 
 
-
+var skybox = null;
 // show the default loader until the hdr is done loading
 var promise = new Promise((resolve, reject) => {
 	try {
 		engine.displayLoadingUI();
 
-		var skybox = BABYLON.MeshBuilder.CreateBox('SkyBox', {size: 3000.0}, scene);
+		skybox = BABYLON.MeshBuilder.CreateBox('SkyBox', {size: 10000.0}, scene);
 		var skyboxMaterial = new BABYLON.StandardMaterial('skyBox', scene);
 		skyboxMaterial.backFaceCulling = false;
 
@@ -89,6 +143,8 @@ var promise = new Promise((resolve, reject) => {
 		skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 		skybox.material = skyboxMaterial;
 
+		
+
 	} catch (err) {
 		reject(err);
 	}
@@ -98,9 +154,66 @@ var promise = new Promise((resolve, reject) => {
 promise.then((res) => {
 	engine.hideLoadingUI();
 	console.log(res);
+
+	planetLight.excludedMeshes.push(skybox);
+
 }, (err) => {
 	console.error(err);
 });
+
+
+
+// planet
+var planetLightSphere = new BABYLON.MeshBuilder.CreateSphere('planetLightSphere', { diameter: 10 }, scene);
+
+var planetEmissive = new BABYLON.StandardMaterial('planetEmissive1', scene);
+planetEmissive.emissiveColor = new BABYLON.Color3(1.0, 1.0, 1.0);
+planetLightSphere.material = planetEmissive;
+
+var planetLight = new BABYLON.DirectionalLight("planet_light", new BABYLON.Vector3(0, 1, 0), scene);
+planetLight.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
+planetLight.specular = new BABYLON.Color3(1, 1, 1);
+planetLight.intensity = 3.5;
+
+
+var planetRoot = new BABYLON.TransformNode('planet_root');
+BABYLON.SceneLoader.ImportMesh(null, 'models/', 'mercury.glb', scene, function (meshes) {
+	meshes.forEach(mesh => {
+		// leave meshes already parented to maintain model hierarchy:
+		if (!mesh.parent) {
+			mesh.parent = planetRoot;
+		}
+	});
+
+
+	planetRoot.position = new BABYLON.Vector3(250, -180, 1000); // good
+	planetRoot.scaling = new BABYLON.Vector3(45, 45, 45);
+
+	setOrbitTarget(planetRoot.position);
+
+
+
+
+	var planetRootPosition = Object.assign({}, planetRoot.position); // assign value not reference in javascript
+
+	planetLightSphere.position = planetRootPosition;
+	planetLightSphere.position.y = planetRootPosition.y + 200;
+	planetLightSphere.position.x = planetRootPosition.x + 400;
+	planetLightSphere.position.z = planetRootPosition.z + 200;
+
+	planetLight.position = planetLightSphere.position;
+
+	var direction = planetLight.setDirectionToTarget(planetRoot.position);
+
+	console.log(direction);
+	
+});
+
+
+
+
+
+
 
 
 
@@ -115,8 +228,9 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'galaxy.glb', scene, function (m
 		}
 	});
 	galaxyRoot.setPivotMatrix(BABYLON.Matrix.Translation(114, -114, 114), false);
-	galaxyRoot.scaling = galaxyRoot.scaling.multiply(new BABYLON.Vector3(3, 2, 3));
-	galaxyRoot.position = new BABYLON.Vector3(80, 25, 500);
+	galaxyRoot.scaling = galaxyRoot.scaling.multiply(new BABYLON.Vector3(22, 10, 22));
+	galaxyRoot.position = new BABYLON.Vector3(80, -10, 3800);
+	galaxyRoot.rotation.x = Math.PI/2 * -0.1;
 });
 
 
@@ -130,8 +244,9 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'black_hole.glb', scene, functio
 			mesh.parent = blackHoleRoot;
 		}
 	});
-	blackHoleRoot.scaling = blackHoleRoot.scaling.multiply(new BABYLON.Vector3(2, 2, 2));
-	blackHoleRoot.position = new BABYLON.Vector3(-80, -55, -300);
+	blackHoleRoot.scaling = blackHoleRoot.scaling.multiply(new BABYLON.Vector3(1, 1, 1));
+	blackHoleRoot.position = new BABYLON.Vector3(2000, -45, 0);
+	blackHoleRoot.rotation.z = Math.PI/2 * 0.03;
 });
 
 
@@ -185,6 +300,10 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'light_post.gltf', scene, functi
 
 
 
+planetLight.excludedMeshes.push(ground);
+
+
+
 const MIN_SELECT_DISTANCE = 30;
 
 
@@ -224,9 +343,19 @@ scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionM
 	if (evt.sourceEvent.key == 'e') {
 		toggleLamp();
 	}
-	if (evt.sourceEvent.key == 'c') {
+	if (evt.sourceEvent.key == 'f') {
+		setCamUniversal();
+	}
+	if (evt.sourceEvent.key == 'r') {
+		setCamArcRotate();
+	}
+
+	if (evt.sourceEvent.key == 'p') {
+		console.log('p pressed');
 
 	}
+
+	
 }));
 
 
@@ -237,19 +366,25 @@ scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionM
 scene.onBeforeRenderObservable.add(() => {
 
 	// automatically deselect the box if player moves out of selection range
-	if (selected && selected.name == 'light_stand') {
-		var dist = BABYLON.Vector3.Distance(camera.position, lampPostRoot.position);
+	// if (selected && selected.name == 'light_stand') {
+	// 	var dist = BABYLON.Vector3.Distance(camera.position, lampPostRoot.position);
 
-		if (dist > MIN_SELECT_DISTANCE) {
-			selectHl.removeMesh(selected);
-			selected = null;
-		}
-	}
+	// 	if (dist > MIN_SELECT_DISTANCE) {
+	// 		selectHl.removeMesh(selected);
+	// 		selected = null;
+	// 	}
+	// }
 
 
 	// rotate galaxy
-	galaxyRoot.rotation.y += 0.0002;
-	// galaxyRoot.rotation.x += 0.005;
+	galaxyRoot.rotation.y += 0.00018;
+
+	// rotate planet
+	planetRoot.rotation.y += 0.0003;
+
+	// orbit camera direction vector
+	// var orbitDirection = BABYLON.Vector3.Normalize(orbitCamera.target.subtract(orbitCamera.position));
+	// console.log(orbitDirection);
 
 });
 
@@ -361,21 +496,29 @@ scene.onPointerObservable.add(function(evt) {
 
 
 
+var setCamUniversal = function() {
+	orbitCamera.attachControl(canvas, false);
 
+	scene.activeCamera = fpsCamera;
+	fpsCamera.attachControl(canvas, true);
 
-let createPointerLock = function (scene) {
-	engine.isPointerLock = true;
-	canvas.addEventListener('click', event => {
-		canvas.requestPointerLock = canvas.requestPointerLock || canvas.msRequestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
-		if (canvas.requestPointerLock) {
-			canvas.requestPointerLock();
-
-			// only allow camera control once pointer lock is enabled
-			camera.attachControl(canvas, false);
-			
-		}
-	}, false);
+	enablePointerLock();
+	attachPointerLockClickEvent();
 };
+var setCamArcRotate = function() {
+	fpsCamera.attachControl(canvas, false);
+
+	scene.activeCamera = orbitCamera;
+
+	orbitCamera.attachControl(canvas, true);
+
+	disablePointerLock();
+	detachPointerLockClickEvent();
+};
+
+
+
+
 
 // check if WebGL is supported on the current browser
 if (!BABYLON.Engine.isSupported()) {
@@ -383,8 +526,7 @@ if (!BABYLON.Engine.isSupported()) {
 }
 
 
-createPointerLock();
-
+setCamArcRotate();
 
 
 var renderLoop = function () {
