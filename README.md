@@ -18,4 +18,4 @@ Go to http://localhost:8080
 
 ### Notes
 * It may take a while to load the textures and assets.
-* BabylonJS uses WebGL it will run best on machines with a moderately fast GPU.
+* BabylonJS uses WebGL and will run best on machines with a moderately fast GPU.
