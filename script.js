@@ -378,18 +378,18 @@ BABYLON.SceneLoader.ImportMesh(null, 'models/', 'galaxy.glb', scene, function (m
 
 
 // black hole
-var blackHoleTN = new BABYLON.TransformNode('blackHolTN');
-BABYLON.SceneLoader.ImportMesh(null, 'models/', 'black_hole.glb', scene, function (meshes) {
-	meshes.forEach(mesh => {
-		// leave meshes already parented to maintain model hierarchy:
-		if (!mesh.parent) {
-			mesh.parent = blackHoleTN;
-		}
-	});
-	blackHoleTN.scaling = blackHoleTN.scaling.multiply(new BABYLON.Vector3(1, 1, 1));
-	blackHoleTN.position = new BABYLON.Vector3(2000, -45, 0);
-	blackHoleTN.rotation.z = Math.PI / 180 * 1.8;
-});
+// var blackHoleTN = new BABYLON.TransformNode('blackHolTN');
+// BABYLON.SceneLoader.ImportMesh(null, 'models/', 'black_hole.glb', scene, function (meshes) {
+// 	meshes.forEach(mesh => {
+// 		// leave meshes already parented to maintain model hierarchy:
+// 		if (!mesh.parent) {
+// 			mesh.parent = blackHoleTN;
+// 		}
+// 	});
+// 	blackHoleTN.scaling = blackHoleTN.scaling.multiply(new BABYLON.Vector3(1, 1, 1));
+// 	blackHoleTN.position = new BABYLON.Vector3(2000, -45, 0);
+// 	blackHoleTN.rotation.z = Math.PI / 180 * 1.8;
+// });
 
 
 
