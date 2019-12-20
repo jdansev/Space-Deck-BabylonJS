@@ -3,7 +3,7 @@ An interactive 3D experience built with [BabylonJS](https://www.babylonjs.com/).
 
 ![Screenshot 1](screenshot1.png) ![Screenshot 2](screenshot2.png)
 
-### Technologies/Tools Used
+### Technologies and Tools Used
 * BabylonJS
 * NodeJS
 * HTML, CSS, JavaScript
