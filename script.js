@@ -138,43 +138,43 @@ scene.collisionsEnabled = true;
 ground.checkCollisions = true;
 
 
-// var skybox = null;
-// // show the default loader until the hdr is done loading
-// var promise = new Promise((resolve, reject) => {
-// 	try {
-// 		engine.displayLoadingUI();
+var skybox = null;
+// show the default loader until the hdr is done loading
+var promise = new Promise((resolve, reject) => {
+	try {
+		engine.displayLoadingUI();
 
-// 		skybox = BABYLON.MeshBuilder.CreateBox('SkyBox', {size: 10000.0}, scene);
-// 		var skyboxMaterial = new BABYLON.StandardMaterial('skyBox', scene);
-// 		skyboxMaterial.backFaceCulling = false;
+		skybox = BABYLON.MeshBuilder.CreateBox('SkyBox', {size: 10000.0}, scene);
+		var skyboxMaterial = new BABYLON.StandardMaterial('skyBox', scene);
+		skyboxMaterial.backFaceCulling = false;
 
-// 		/* HDRCubeTexture
-// 			https://doc.babylonjs.com/how_to/reflect#hdrcubetexture
-// 			https://www.babylonjs-playground.com/#114YPX#5
-// 		*/
-// 		skyboxMaterial.reflectionTexture = new BABYLON.HDRCubeTexture('images/space.hdr', scene, QUALITY, false, false, false, false, function() {
-// 			resolve('skybox loaded');
-// 		});
-// 		skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-// 		skybox.material = skyboxMaterial;
-
-
-
-// 	} catch (err) {
-// 		reject(err);
-// 	}
-// });
+		/* HDRCubeTexture
+			https://doc.babylonjs.com/how_to/reflect#hdrcubetexture
+			https://www.babylonjs-playground.com/#114YPX#5
+		*/
+		skyboxMaterial.reflectionTexture = new BABYLON.HDRCubeTexture('images/space.hdr', scene, QUALITY, false, false, false, false, function() {
+			resolve('skybox loaded');
+		});
+		skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+		skybox.material = skyboxMaterial;
 
 
-// promise.then((res) => {
-// 	engine.hideLoadingUI();
-// 	console.log(res);
 
-// 	planetLight.excludedMeshes.push(skybox);
+	} catch (err) {
+		reject(err);
+	}
+});
 
-// }, (err) => {
-// 	console.error(err);
-// });
+
+promise.then((res) => {
+	engine.hideLoadingUI();
+	console.log(res);
+
+	planetLight.excludedMeshes.push(skybox);
+
+}, (err) => {
+	console.error(err);
+});
 
 
 
