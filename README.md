@@ -1,13 +1,11 @@
 # Interstellar Observation Deck
 An interactive 3D experience built with [BabylonJS](https://www.babylonjs.com/). Witness some of the universe's most beautiful and mysterious celestial bodies from an observation deck in deep space. The models used in this project are from [Sketchfab](https://sketchfab.com/).
 
-### Technologies Used
+### Technologies/Tools Used
 * BabylonJS
 * NodeJS
 * HTML, CSS, JavaScript
-
-### Design Tools
-Blender
+* Blender
 
 ### Instructions
 Move: `w a s d`  
