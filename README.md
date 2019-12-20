@@ -4,8 +4,8 @@ An interactive 3D experience built with [BabylonJS](https://www.babylonjs.com/).
 ### Instructions
 Move: `w a s d`  
 Toggle night lamp on/off: `e`  
-First-person view: `f`  
-Orbit camera (rotate): `r`  
+Toggle between first person and orbit view: `c`  
+Select the spaceship or the planet while in orbit mode to switch between orbit objects
 
 ### Setup
 To run this project, install it locally using npm:  
