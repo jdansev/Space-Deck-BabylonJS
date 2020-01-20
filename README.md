@@ -29,5 +29,5 @@ npx http-server
 Go to http://localhost:8080
 
 ### Requirements
-* A fast GPU since BabylonJS uses WebGL
-* Some patience while loading the textures and assets which could take a few minutes
+* A fast GPU that can handle moderately heavy WebGL content
+* Patience while the textures and assets load, which might take a few minutes
