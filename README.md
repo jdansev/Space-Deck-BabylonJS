@@ -1,6 +1,6 @@
 # Interstellar Observation Deck
 
-Recently I've noticed that 3D related graphics (games, virtual sims, etc.) were less prevalent on the web than their desktop counterparts. The few that do, existed in the form of short demos and mini games. I was intrigued and put together this scene to explore the capabilities of 3D graphics on the web. I used [BabylonJS](https://www.babylonjs.com/) which is a 3D engine for JavaScript that comes with very good documentation and framework tools. The models used in this project were sourced from [Sketchfab](https://sketchfab.com/).
+Recently I've noticed that 3D related graphics (games, virtual sims, etc.) were less prevalent on the web than their desktop counterparts. The few that do, existed in the form of short demos and mini games. I was intrigued and began this project to explore the capabilities of 3D graphics on the web. The environment setting is outer space, with some interesting moving visuals and interactive elements. I used [BabylonJS](https://www.babylonjs.com/), a 3D JavaScript engine that comes with good documentation and framework tools. I've also sourced some high quality assets from [Sketchfab](https://sketchfab.com/).
 
 ![Screenshot 1](screenshot1.png) ![Screenshot 2](screenshot2.png)
 
@@ -25,6 +25,6 @@ npx http-server
 
 Go to http://localhost:8080
 
-### Note
-* May take a while to load the textures and assets.
-* Because BabylonJS uses WebGL, a decent GPU is recommended.
+### Requirements
+* A fast GPU since BabylonJS uses WebGL
+* Some patience while loading the textures and assets which could take a few minutes
