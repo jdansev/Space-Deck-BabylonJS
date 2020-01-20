@@ -1,6 +1,6 @@
 # 3D Space Deck (Web Experience)
 
-Recently I've noticed that 3D related graphics (games, virtual sims, etc.) were less prevalent on the web than their desktop counterparts. The few that do, existed in the form of short demos and mini games. I was intrigued and began this project to explore the capabilities of 3D graphics on the web.
+Recently I've noticed that 3D related graphics (games, virtual sims, etc.) were less prevalent on the web than their desktop counterparts. The few that do, existed in the form of short demos and mini games. I was intrigued and began the ambitious journey of exploring the capabilities of 3D graphics on the web with this project.
 
 The environment is set in outer space, with some moving visuals and interactive elements, and the freedom to move and look around. I used [BabylonJS](https://www.babylonjs.com/), a 3D JavaScript engine that comes with good documentation and framework tools. I've also sourced some high quality assets from [Sketchfab](https://sketchfab.com/).
 
