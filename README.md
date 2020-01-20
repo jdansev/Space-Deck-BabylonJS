@@ -29,5 +29,5 @@ npx http-server
 Go to http://localhost:8080
 
 ### Requirements
-* A fast GPU that can handle moderately heavy WebGL content
+* A fast GPU for running WebGL
 * Patience while the textures and assets load, which might take a few minutes
