@@ -14,9 +14,13 @@ The environment is set in outer space, with some moving visuals and interactive 
 * Blender for editing/preparing the 3D models
 
 ### Instructions
+
+#### Navigation
 Move: `w a s d`  
+Toggle between first person and orbit view: `c` 
+
+#### Interactions
 Toggle night lamp on/off: `e`  
-Toggle between first person and orbit view: `c`  
 Select the spaceship or the planet while in orbit mode to switch between orbit objects
 
 ### Setup
