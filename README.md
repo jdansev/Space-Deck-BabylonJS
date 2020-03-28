@@ -26,11 +26,8 @@ Select the spaceship or the planet while in orbit mode to switch between orbit o
 ### Setup
 To run this project, install it locally using npm:  
 ```
-npm install
-npx http-server
+yarn install && yarn start
 ```
-
-Go to http://localhost:8080
 
 ### Requirements
 * A fast GPU for running WebGL
