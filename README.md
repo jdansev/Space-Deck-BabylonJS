@@ -21,7 +21,7 @@ Toggle between first person and orbit view: `c`
 
 #### Interactions
 Toggle night lamp on/off: `e`  
-Select the spaceship or the planet while in orbit mode to switch between orbit objects
+Select the spaceship or the planet while in orbit mode to switch between orbit objects  
 Scroll to zoom in and out while in orbit mode
 
 ### Setup
