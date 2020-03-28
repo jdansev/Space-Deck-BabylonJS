@@ -24,7 +24,7 @@ Toggle night lamp on/off: `e`
 Select the spaceship or the planet while in orbit mode to switch between orbit objects
 
 ### Setup
-To run this project, install it locally using npm:  
+To run this project, use yarn:  
 ```
 yarn install && yarn start
 ```
