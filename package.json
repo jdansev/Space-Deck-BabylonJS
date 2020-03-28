@@ -1,22 +1,10 @@
+
 {
-  "name": "interstellar-observation-deck",
-  "version": "1.0.0",
-  "description": "An observation deck in the far depths of space. Made with BabylonJS",
-  "main": "script.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jdansev/Interstellar-Observation-Deck.git"
-  },
-  "author": "John Daniel Sevilla",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jdansev/Interstellar-Observation-Deck/issues"
-  },
-  "homepage": "https://github.com/jdansev/Interstellar-Observation-Deck#readme",
   "dependencies": {
-    "http-server": "^0.12.0"
+    "browser-sync": "^2.26.7",
+    "concurrently": "^5.1.0"
+  },
+  "scripts": {
+    "start": "yarn browser-sync -s -f . --port 9000"
   }
 }

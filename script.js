@@ -5,8 +5,8 @@ const QUALITY = QUALITY_HIGH;
 
 
 var engine, scene;
-
 var fpsCamera, orbitCamera;
+
 var lastCamPos = new BABYLON.Vector3.Zero();
 
 var canvas = document.getElementById('renderCanvas');
